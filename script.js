@@ -1,182 +1,140 @@
-let currentUser = null;
-let cart = [];
-let services = [
-  { id: 1, title: 'Word', price: 25 },
-  { id: 2, title: 'Excel', price: 25 },
-  { id: 3, title: 'PowerPoint', price: 25 },
-  { id: 4, title: 'Atividade com prazo', price: 50 },
-  { id: 5, title: 'Atividade sem prazo', price: 30 }
-];
-
-const loginContainer = document.getElementById('login-container');
-const registerContainer = document.getElementById('register-container');
-const mainPanel = document.getElementById('main-panel');
-const usernameSpan = document.getElementById('username');
-const serviceList = document.getElementById('service-list');
-const cartItemsDiv = document.getElementById('cart-items');
-const cartTotalSpan = document.getElementById('cart-total');
-const cartSection = document.getElementById('cart-section');
-const profilePhoto = document.getElementById('profile-photo');
-const profileMenu = document.getElementById('profile-menu');
-const orderListDiv = document.getElementById('order-list');
-
-function showLogin() {
-  loginContainer.classList.remove('hidden');
-  registerContainer.classList.add('hidden');
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  color: white;
 }
 
-function showRegister() {
-  registerContainer.classList.remove('hidden');
-  loginContainer.classList.add('hidden');
+.container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 25px;
+  background-color: #1f1f1f;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
 }
 
-function login() {
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
-
-  if (email && password) {
-    // Simulando login (em um caso real, deve verificar em banco de dados)
-    currentUser = { email: email, name: email.split('@')[0] };
-    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-    updateUI();
-    showMainPanel();
-  } else {
-    document.getElementById('login-message').innerText = 'Por favor, insira todos os campos.';
-  }
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
 }
 
-function register() {
-  const name = document.getElementById('register-name').value;
-  const email = document.getElementById('register-email').value;
-  const password = document.getElementById('register-password').value;
-
-  if (name && email && password) {
-    // Simulando registro (em um caso real, deve salvar no banco de dados)
-    alert('Conta criada com sucesso!');
-    showLogin();
-  } else {
-    document.getElementById('register-message').innerText = 'Por favor, preencha todos os campos.';
-  }
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-function showMainPanel() {
-  loginContainer.classList.add('hidden');
-  registerContainer.classList.add('hidden');
-  mainPanel.classList.remove('hidden');
+button:hover {
+  background-color: #0056b3;
 }
 
-function toggleSection(section) {
-  const sections = document.querySelectorAll('.section');
-  sections.forEach(s => s.classList.add('hidden'));
-
-  if (section === 'services') {
-    loadServices();
-    document.getElementById('services-section').classList.remove('hidden');
-  } else if (section === 'cart') {
-    loadCart();
-    document.getElementById('cart-section').classList.remove('hidden');
-  } else if (section === 'orders') {
-    loadOrders();
-    document.getElementById('orders-section').classList.remove('hidden');
-  }
+.forgot-password {
+  color: #ccc;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: right;
 }
 
-function loadServices() {
-  serviceList.innerHTML = '';
-  services.forEach(service => {
-    const serviceCard = document.getElementById('service-template').content.cloneNode(true);
-    serviceCard.querySelector('.service-title').textContent = service.title;
-    serviceCard.querySelector('.service-price').textContent = `R$ ${service.price}`;
-    serviceCard.querySelector('.add-to-cart').onclick = () => addToCart(service);
-    serviceList.appendChild(serviceCard);
-  });
+.hidden {
+  display: none;
 }
 
-function addToCart(service) {
-  cart.push(service);
-  alert(`${service.title} adicionado ao carrinho!`);
-  updateCartTotal();
+header {
+  background-color: #222;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-function updateCartTotal() {
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
-  cartTotalSpan.textContent = total.toFixed(2);
+header h1 {
+  margin: 0;
+  font-size: 20px;
 }
 
-function loadCart() {
-  cartItemsDiv.innerHTML = '';
-  cart.forEach(item => {
-    const cartItem = document.createElement('div');
-    cartItem.className = 'cart-item';
-    cartItem.innerHTML = `<p>${item.title}</p><p>R$ ${item.price}</p>`;
-    cartItemsDiv.appendChild(cartItem);
-  });
+nav {
+  display: flex;
+  justify-content: center;
+  background-color: #333;
 }
 
-function applyCoupon() {
-  const coupon = document.getElementById('coupon').value;
-  if (coupon === 'DESCONTO') {
-    alert('Cupom de desconto aplicado!');
-    const discount = cart.reduce((sum, item) => sum + item.price, 0) * 0.10;
-    const newTotal = cart.reduce((sum, item) => sum + item.price, 0) - discount;
-    cartTotalSpan.textContent = newTotal.toFixed(2);
-  } else {
-    alert('Cupom inválido.');
-  }
+nav button {
+  flex: 1;
+  background-color: #333;
+  border-radius: 0;
+  border: none;
 }
 
-function confirmPayment() {
-  alert('Pagamento confirmado! Seu pedido será enviado em breve.');
-  cart = [];
-  updateCartTotal();
-  toggleSection('orders');
+nav button:hover {
+  background-color: #444;
 }
 
-function updateProfilePhoto(event) {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function() {
-      profilePhoto.src = reader.result;
-    };
-    reader.readAsDataURL(file);
-  }
+main {
+  padding: 20px;
 }
 
-function toggleProfileMenu() {
-  profileMenu.classList.toggle('hidden');
+.section {
+  margin-top: 20px;
 }
 
-function logout() {
-  currentUser = null;
-  localStorage.removeItem('currentUser');
-  alert('Você saiu da sua conta.');
-  showLogin();
+#service-list {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
 }
 
-function loadOrders() {
-  orderListDiv.innerHTML = '';
-  const orders = JSON.parse(localStorage.getItem('orders')) || [];
-  orders.forEach(order => {
-    const orderItem = document.createElement('div');
-    orderItem.innerHTML = `<p>Pedido: ${order.title}</p><p>Status: ${order.status}</p>`;
-    orderListDiv.appendChild(orderItem);
-  });
+.service-card {
+  background-color: #2e2e2e;
+  padding: 15px;
+  border-radius: 10px;
+  min-width: 250px;
 }
 
-// Iniciar o usuário se já tiver logado anteriormente
-window.onload = function() {
-  const storedUser = localStorage.getItem('currentUser');
-  if (storedUser) {
-    currentUser = JSON.parse(storedUser);
-    updateUI();
-    showMainPanel();
-  }
-};
+textarea {
+  height: 80px;
+}
 
-function updateUI() {
-  if (currentUser) {
-    usernameSpan.textContent = currentUser.name;
-    profilePhoto.src = currentUser.profilePhoto || 'default-profile.png';
-  }
+.menu {
+  position: relative;
+}
+
+#profile-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+#profile-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: #222;
+  border: 1px solid #444;
+  padding: 10px;
+  z-index: 10;
+}
+
+#cart-items div, #order-list div {
+  background-color: #1a1a1a;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+}
+
+.pix-alert {
+  font-size: 14px;
+  color: yellow;
+  margin-top: 10px;
 }
