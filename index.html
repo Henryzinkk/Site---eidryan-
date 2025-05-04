@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eidryan Serviços Premium</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Login -->
+  <div id="login-container" class="container">
+    <h2>Login</h2>
+    <input type="email" id="login-email" placeholder="Email">
+    <input type="password" id="login-password" placeholder="Senha">
+    <button onclick="login()">Entrar</button>
+    <p id="login-message"></p>
+    <p class="forgot-password" onclick="forgotPassword()">Esqueceu a senha?</p>
+    <p>Não tem uma conta? <a href="#" onclick="showRegister()">Registre-se</a></p>
+  </div>
+
+  <!-- Registro -->
+  <div id="register-container" class="container hidden">
+    <h2>Registrar</h2>
+    <input type="text" id="register-name" placeholder="Nome completo">
+    <input type="email" id="register-email" placeholder="Email">
+    <input type="password" id="register-password" placeholder="Senha">
+    <button onclick="register()">Registrar</button>
+    <p id="register-message"></p>
+    <p>Já tem conta? <a href="#" onclick="showLogin()">Faça login</a></p>
+  </div>
+
+  <!-- Painel Principal -->
+  <div id="main-panel" class="hidden">
+    <header>
+      <h1>Bem-vindo(a), <span id="username"></span></h1>
+      <div class="menu">
+        <img id="profile-photo" src="" alt="Perfil" onclick="toggleProfileMenu()">
+        <div id="profile-menu" class="hidden">
+          <label>
+            Alterar foto de perfil
+            <input type="file" accept="image/*" onchange="updateProfilePhoto(event)" style="display:none">
+          </label>
+          <button onclick="toggleSection('orders')">Minhas compras</button>
+          <button onclick="logout()">Sair</button>
+        </div>
+      </div>
+    </header>
+
+    <nav>
+      <button onclick="toggleSection('services')">Serviços</button>
+      <button onclick="toggleSection('cart')">Carrinho</button>
+    </nav>
+
+    <main>
+      <!-- Serviços -->
+      <section id="services-section" class="section">
+        <h2>Serviços Disponíveis</h2>
+        <div id="service-list" class="scroll-horizontal"></div>
+      </section>
+
+      <!-- Carrinho -->
+      <section id="cart-section" class="section hidden">
+        <h2>Carrinho</h2>
+        <div id="cart-items"></div>
+        <p>Total: R$ <span id="cart-total">0.00</span></p>
+        <input type="text" id="coupon" placeholder="Cupom de desconto">
+        <button onclick="applyCoupon()">Aplicar cupom</button>
+        <p>Chave Pix: henryolive26@gmail.com</p>
+        <p class="pix-alert">Após o pagamento cair, clique no botão abaixo</p>
+        <button onclick="confirmPayment()">Confirmar pagamento</button>
+      </section>
+
+      <!-- Compras -->
+      <section id="orders-section" class="section hidden">
+        <h2>Minhas Compras</h2>
+        <div id="order-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Template de Serviço -->
+  <template id="service-template">
+    <div class="service-card">
+      <h3 class="service-title"></h3>
+      <p class="service-price"></p>
+      <textarea class="service-description" placeholder="Descreva como deseja o serviço..."></textarea>
+      <button class="add-to-cart">Adicionar ao carrinho</button>
+    </div>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
